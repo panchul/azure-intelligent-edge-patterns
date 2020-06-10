@@ -1,10 +1,10 @@
 # This is the configuration for Porter
 
 name: KubeflowInstaller
-version: 0.1.11
+version: 0.1.17
 description: "Kubeflow Installer"
 # TODO: update the registry to your own, e.g. myregistry/porter-kubeflow:v0.1.0
-tag: myregistry/porter-kubeflow:v0.1.11
+tag: myregistry/porter-kubeflow:v0.1.17
 
 # Uncomment the line below to use a template Dockerfile for your invocation image
 dockerfile: Dockerfile.tmpl
@@ -12,17 +12,17 @@ dockerfile: Dockerfile.tmpl
 parameters:
   - name: kf_ctl_dir
     type: string
-    default: ~/kubeflow/
+    default: /root/kubeflow/
   - name: kf_username
     type: string
-    default: azureuser
+    #default: azureuser
+    default: root
   - name: kf_name
     type: string
     default: sandboxASkf
   - name: kf_dir_base
     type: string
-    #default: /opt
-    default: ~/kubeflow_opt
+    default: /opt
   - name: kfctl_release_filename
     type: string
     default: "kfctl_v1.0.2-0-ga476281_linux.tar.gz"

@@ -25,7 +25,7 @@ install() {
         KFCTL_RELEASE_FILENAME="$2"
         echo "set kfctl_release_filename to ${KFCTL_RELEASE_FILENAME}"
         shift
-        ;;
+       ;;
       --kfctl_release_uri)
         KFCTL_RELEASE_URI="$2"
         echo "set kfctl_release_uri to ${KFCTL_RELEASE_URI}"
@@ -74,11 +74,14 @@ install() {
   echo "KF_CONFIG_FILENAME=: $KF_CONFIG_FILENAME"
   echo "KF_CONFIG_URI=: $KF_CONFIG_URI"
 
-  echo "#--- Kubeflow config" >> ~/.bashrc
-  echo "export PATH=\$PATH:${KF_CTL_DIR}" >> ~/.bashrc
-  echo "export KF_DIR=${KF_DIR}" >> ~/.bashrc
-  echo "export KF_CONFIG_FILENAME=${KF_CONFIG_FILENAME}" >> ~/.bashrc
-  echo "#--- Kubeflow config end" >> ~/.bashrc
+  #echo `whoami`
+  #echo "USER $USER"
+
+  #echo "#--- Kubeflow config" >> ~/.bashrc
+  #echo "export PATH=\$PATH:${KF_CTL_DIR}" >> ~/.bashrc
+  #echo "export KF_DIR=${KF_DIR}" >> ~/.bashrc
+  #echo "export KF_CONFIG_FILENAME=${KF_CONFIG_FILENAME}" >> ~/.bashrc
+  #echo "#--- Kubeflow config end" >> ~/.bashrc
 
   echo "Creating the dir for kfctl, $KF_CTL_DIR"
   mkdir -p $KF_CTL_DIR || exit 2
@@ -94,7 +97,9 @@ install() {
   chown ${KF_USERNAME} ${KF_DIR}  || exit 2
 
   cd ${KF_DIR}  || exit 2
-  kfctl apply -V -f ${KF_CONFIG_URI}  || exit 2
+  echo `pwd`
+  echo "$KF_CTL_DIR/kfctl apply -V -f ${KF_CONFIG_URI}"
+  $KF_CTL_DIR/kfctl apply -V -f ${KF_CONFIG_URI}  || exit 2
 }
 
 uninstall() {
@@ -102,11 +107,11 @@ uninstall() {
   while [[ $# > 0 ]]
   do
     case "$1" in
-      #--kf_ctl_dir)
-      #  KF_CTL_DIR="$2"
-      #  echo "set kf_ctl_dir to ${KF_CTL_DIR}"
-      #  shift
-      #  ;;
+      --kf_ctl_dir)
+        KF_CTL_DIR="$2"
+        echo "set kf_ctl_dir to ${KF_CTL_DIR}"
+        shift
+        ;;
       --kf_name)
         KF_NAME="$2"
         echo "set kf_name to ${KF_NAME}"
@@ -124,7 +129,7 @@ uninstall() {
         ;;
       --help|*)
         echo "Options:"
-        # echo "        --kf_ctl_dir"
+        echo "        --kf_ctl_dir"
         echo "        --kf_name"
         echo "        --kf_username"
         echo "        --kf_dir_base"
@@ -134,14 +139,15 @@ uninstall() {
     esac
     shift
   done
-  #echo "KF_CTL_DIR: $KF_CTL_DIR"
+  echo "KF_CTL_DIR: $KF_CTL_DIR"
   echo "KF_NAME: $KF_NAME"
   KF_DIR=${KF_DIR_BASE}/${KF_NAME}
   echo "KF_DIR_BASE: $KF_DIR_BASE"
   echo "KF_DIR: $KF_DIR"
   echo "KF_CONFIG_FILENAME=: $KF_CONFIG_FILENAME"
   cd ${KF_DIR} || exit 2
-  kfctl delete -f ${KF_DIR}/${KF_CONFIG_FILENAME}
+  # might need to download this file first.
+  $KF_CTL_DIR/kfctl delete -f ${KF_DIR}/${KF_CONFIG_FILENAME}
 }
 
 # Call the requested function and pass the arguments as-is
