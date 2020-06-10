@@ -21,6 +21,11 @@ install() {
         echo "set kf_username to ${KF_USERNAME}"
         shift
         ;;
+      --kfctl_release_filename)
+        KFCTL_RELEASE_FILENAME="$2"
+        echo "set kfctl_release_filename to ${KFCTL_RELEASE_FILENAME}"
+        shift
+        ;;
       --kfctl_release_uri)
         KFCTL_RELEASE_URI="$2"
         echo "set kfctl_release_uri to ${KFCTL_RELEASE_URI}"
@@ -46,6 +51,7 @@ install() {
         echo "        --kf_ctl_dir"
         echo "        --kf_name"
         echo "        --kf_username"
+        echo "        --kfctl_release_filename"
         echo "        --kfctl_release_uri"
         echo "        --kf_dir_base"
         echo "        --kf_config_uri"
@@ -60,6 +66,7 @@ install() {
   echo "KF_CTL_DIR: $KF_CTL_DIR"
   echo "KF_NAME: $KF_NAME" 
   echo "KF_USERNAME: $KF_USERNAME" 
+  echo "KFCTL_RELEASE_FILENAME: $KFCTL_RELEASE_FILENAME"
   echo "KFCTL_RELEASE_URI: $KFCTL_RELEASE_URI"
   KF_DIR=${KF_DIR_BASE}/${KF_NAME}
   echo "KF_DIR_BASE: $KF_DIR_BASE"
@@ -76,7 +83,8 @@ install() {
   echo "Creating the dir for kfctl, $KF_CTL_DIR"
   mkdir -p $KF_CTL_DIR || exit 2
   cd $KF_CTL_DIR  || exit 2
-  /usr/bin/curl -O $KFCTL_RELEASE_URI || exit 2
+  wget -q $KFCTL_RELEASE_URI || exit 2
+  #curl -O $KFCTL_RELEASE_URI || exit 2
   tar -xvf ${KFCTL_RELEASE_FILENAME} || exit 2
   # porter
   #sudo mkdir -p ${KF_DIR} || exit 2
